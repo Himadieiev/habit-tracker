@@ -1,0 +1,50 @@
+@use 'media' as *;
+
+:root {
+    /* COLORS */
+    --color-bg: #141414;
+    --color-bg-secondary: #1a1a1a;
+    --color-bg-tertiary: #262626;
+
+    --color-text: #7e7e81;
+    --color-text-secondary: #98989a;
+
+    --color-white: #ffffff;
+    --color-accent: #ffd11a;
+    --color-danger: #ff5500;
+
+    --color-border: #262626;
+
+    /* TYPOGRAPHY */
+    --font-base: "Inter", sans-serif;
+    --font-accent: "Kumbh Sans", sans-serif;
+
+    /* LAYOUT */
+    --container-width: 1400px;
+    --container-padding: 16px;
+
+    /* RADIUS */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    /* SHADOW */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    /* GRADIENT */
+    --gradient-primary: linear-gradient(135deg,
+            var(--color-bg-secondary),
+            var(--color-accent));
+
+    /* ANIMATION */
+    --transition: 0.2s ease;
+
+    @include laptop {
+        --container-width: 1280px;
+    }
+
+    @include tablet {
+        --container-width: 100%;
+    }
+}

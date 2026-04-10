@@ -1,4 +1,98 @@
+@use "media" as *;
+@use "mixins" as *;
+
+html {
+    &.is-lock {
+        overflow: hidden;
+    }
+}
+
 body {
-    background-color: black;
-    color: white
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font-base);
+    letter-spacing: -0.03em;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+}
+
+main {
+    flex-grow: 1;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--color-white);
+}
+
+a,
+button,
+label,
+input,
+textarea,
+select {
+    transition: all var(--transition);
+}
+
+svg path {
+    transition: fill var(--transition), stroke var(--transition);
+}
+
+a {
+    color: inherit;
+
+    @include hover {
+        color: var(--color-accent);
+    }
+
+    &[class] {
+        text-decoration: none;
+    }
+}
+
+:focus-visible {
+    outline: 2px dashed var(--color-white);
+    outline-offset: 4px;
+    transition-duration: 0s !important;
+}
+
+a,
+button {
+    &[aria-label] {
+        position: relative;
+
+        &::before {
+            @include abs-center;
+            @include square(44px);
+
+            content: "";
+        }
+    }
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-tertiary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-text);
+    border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-button {
+    display: none;
+}
+
+@supports (-moz-appearance: none) {
+    html {
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-text) var(--color-bg-tertiary);
+    }
 }
