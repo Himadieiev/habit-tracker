@@ -10,8 +10,13 @@ html {
 body {
     display: flex;
     flex-direction: column;
+
     font-family: var(--font-base);
+    font-size: var(--text-md);
+    line-height: var(--lh-normal);
+
     letter-spacing: -0.03em;
+
     color: var(--color-text);
     background-color: var(--color-bg);
 }
@@ -20,12 +25,57 @@ main {
     flex-grow: 1;
 }
 
+/* HEADINGS */
 h1,
 h2,
-h3 {
+h3,
+h4,
+h5,
+h6 {
     color: var(--color-white);
 }
 
+h1 {
+    font-size: var(--text-4xl);
+    line-height: var(--lh-tight);
+}
+
+h2 {
+    font-size: var(--text-3xl);
+    line-height: var(--lh-tight);
+}
+
+h3 {
+    font-size: var(--text-2xl);
+    line-height: var(--lh-normal);
+}
+
+h4 {
+    font-size: var(--text-xl);
+    line-height: var(--lh-normal);
+}
+
+h5 {
+    font-size: var(--text-lg);
+    line-height: var(--lh-normal);
+}
+
+h6 {
+    font-size: var(--text-md);
+    line-height: var(--lh-normal);
+}
+
+/* TEXT */
+p {
+    font-size: var(--text-md);
+    line-height: var(--lh-normal);
+}
+
+small {
+    font-size: var(--text-sm);
+}
+
+/* INTERACTIONS */
 a,
 button,
 label,
@@ -51,12 +101,14 @@ a {
     }
 }
 
+/* FOCUS */
 :focus-visible {
     outline: 2px dashed var(--color-white);
     outline-offset: 4px;
     transition-duration: 0s !important;
 }
 
+/* CLICK AREA */
 a,
 button {
     &[aria-label] {
@@ -65,7 +117,6 @@ button {
         &::before {
             @include abs-center;
             @include square(44px);
-
             content: "";
         }
     }

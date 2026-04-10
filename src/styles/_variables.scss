@@ -19,6 +19,21 @@
     --font-base: "Inter", sans-serif;
     --font-accent: "Kumbh Sans", sans-serif;
 
+    /* TYPOGRAPHY SCALE */
+    --text-xs: 12px;
+    --text-sm: 14px;
+    --text-md: 16px;
+    --text-lg: 18px;
+    --text-xl: 20px;
+    --text-2xl: 24px;
+    --text-3xl: 32px;
+    --text-4xl: 40px;
+
+    /* LINE HEIGHT */
+    --lh-tight: 1.2;
+    --lh-normal: 1.5;
+    --lh-relaxed: 1.7;
+
     /* LAYOUT */
     --container-width: 1400px;
     --container-padding: 16px;
@@ -40,6 +55,7 @@
     /* ANIMATION */
     --transition: 0.2s ease;
 
+    /* RESPONSIVE */
     @include laptop {
         --container-width: 1280px;
     }
