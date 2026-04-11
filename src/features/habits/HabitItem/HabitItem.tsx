@@ -7,9 +7,10 @@ type HabitItemProps = {
   title: string;
   completed: boolean;
   onToggle: () => void;
+  onDelete: () => void;
 };
 
-export const HabitItem = ({title, completed, onToggle}: HabitItemProps) => {
+export const HabitItem = ({title, completed, onToggle, onDelete}: HabitItemProps) => {
   return (
     <div
       className={classNames(styles.item, {
@@ -23,6 +24,10 @@ export const HabitItem = ({title, completed, onToggle}: HabitItemProps) => {
 
         <Button size="sm" variant={completed ? "secondary" : "primary"} onClick={onToggle}>
           {completed ? "Undo" : "Complete"}
+        </Button>
+
+        <Button size="sm" variant="ghost" onClick={onDelete}>
+          Delete
         </Button>
       </div>
     </div>

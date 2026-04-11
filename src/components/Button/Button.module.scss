@@ -50,6 +50,7 @@
 
     @include hover {
         color: var(--color-accent);
+        background: var(--color-bg-tertiary);
     }
 }
 
