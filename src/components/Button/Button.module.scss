@@ -5,6 +5,10 @@
     align-items: center;
     justify-content: center;
 
+    min-height: 40px;
+    line-height: 1;
+    white-space: nowrap;
+
     border: none;
     border-radius: var(--radius-md);
 

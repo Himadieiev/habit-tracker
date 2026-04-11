@@ -1,5 +1,7 @@
+import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
+
 const App = () => {
-  return <div>Habit Tracker</div>;
+  return <HabitsPage />;
 };
 
 export default App;

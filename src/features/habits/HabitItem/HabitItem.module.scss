@@ -1,0 +1,30 @@
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+}
+
+.title {
+    color: var(--color-white);
+}
+
+.status {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.completed {
+    opacity: 0.6;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
