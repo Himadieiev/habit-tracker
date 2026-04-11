@@ -1,7 +1,5 @@
 import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
 
-const App = () => {
+export const App = () => {
   return <HabitsPage />;
 };
-
-export default App;
