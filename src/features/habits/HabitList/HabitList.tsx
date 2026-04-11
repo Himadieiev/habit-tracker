@@ -1,6 +1,7 @@
 import {useState} from "react";
 
 import {HabitItem} from "../HabitItem/HabitItem";
+import {AddHabitForm} from "../AddHabitForm/AddHabitForm";
 import styles from "./HabitList.module.scss";
 
 type Habit = {
@@ -24,16 +25,31 @@ export const HabitList = () => {
     );
   };
 
+  const addHabit = (title: string) => {
+    setHabits((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        title,
+        completed: false,
+      },
+    ]);
+  };
+
   return (
-    <div className={styles.list}>
-      {habits.map((habit) => (
-        <HabitItem
-          key={habit.id}
-          title={habit.title}
-          completed={habit.completed}
-          onToggle={() => toggleHabit(habit.id)}
-        />
-      ))}
+    <div className={styles.wrapper}>
+      <AddHabitForm onAdd={addHabit} />
+
+      <div className={styles.list}>
+        {habits.map((habit) => (
+          <HabitItem
+            key={habit.id}
+            title={habit.title}
+            completed={habit.completed}
+            onToggle={() => toggleHabit(habit.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,0 +1,25 @@
+.form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.input {
+    flex: 1;
+
+    padding: 10px 12px;
+
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+
+    background: var(--color-bg-secondary);
+    color: var(--color-white);
+
+    outline: none;
+
+    transition: border-color var(--transition);
+
+    &:focus {
+        border-color: var(--color-accent);
+    }
+}
