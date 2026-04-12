@@ -1,4 +1,6 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
+
+const STORAGE_KEY = "habits";
 
 type Habit = {
   id: number;
@@ -8,15 +10,20 @@ type Habit = {
 
 type Filter = "all" | "active" | "completed";
 
-const initialHabits: Habit[] = [
-  {id: 1, title: "Drink water", completed: false},
-  {id: 2, title: "Workout", completed: true},
-  {id: 3, title: "Read a book", completed: false},
-];
-
 export const useHabits = () => {
-  const [habits, setHabits] = useState(initialHabits);
+  const [habits, setHabits] = useState<Habit[]>(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
   const [filter, setFilter] = useState<Filter>("all");
+
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+  }, [habits]);
 
   const toggleHabit = (id: number) => {
     setHabits((prev) =>
