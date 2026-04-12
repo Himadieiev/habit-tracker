@@ -1,7 +1,8 @@
 import {createBrowserRouter} from "react-router-dom";
 
-import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
 import {LoginPage} from "@/pages/LoginPage/LoginPage";
+import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
+import {ProtectedRoute} from "@/features/auth/ui/ProtectedRoute";
 
 export const router = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ export const router = createBrowserRouter([
   },
   {
     path: "/",
-    element: <HabitsPage />,
+    element: (
+      <ProtectedRoute>
+        <HabitsPage />
+      </ProtectedRoute>
+    ),
   },
 ]);
