@@ -1,28 +1,15 @@
 import {useEffect, useState} from "react";
 
-const STORAGE_KEY = "habits";
-
-type Habit = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
+import {habitsService, type Habit} from "../api/habitsService";
 
 type Filter = "all" | "active" | "completed";
 
 export const useHabits = () => {
-  const [habits, setHabits] = useState<Habit[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [habits, setHabits] = useState<Habit[]>(() => habitsService.getAll());
   const [filter, setFilter] = useState<Filter>("all");
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+    habitsService.saveAll(habits);
   }, [habits]);
 
   const toggleHabit = (id: number) => {
