@@ -7,7 +7,7 @@ import {supabase} from "@/lib/supabaseClient";
 import styles from "./HabitsPage.module.scss";
 
 export const HabitsPage = () => {
-  const {habits, filter, setFilter, toggleHabit, addHabit, deleteHabit} = useHabits();
+  const {habits, filter, setFilter, toggleHabit, addHabit, deleteHabit, loading} = useHabits();
 
   return (
     <div className={styles.page}>
@@ -17,7 +17,7 @@ export const HabitsPage = () => {
 
       <HabitFilters value={filter} onChange={setFilter} />
 
-      <HabitList habits={habits} onToggle={toggleHabit} onDelete={deleteHabit} />
+      <HabitList habits={habits} onToggle={toggleHabit} onDelete={deleteHabit} loading={loading} />
 
       <Button variant="secondary" size="sm" onClick={() => supabase.auth.signOut()}>
         Logout

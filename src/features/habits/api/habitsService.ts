@@ -1,22 +1,123 @@
-const STORAGE_KEY = "habits";
+import {supabase} from "@/lib/supabaseClient";
 
-export type Habit = {
-  id: number;
+export type HabitFromDB = {
+  id: string;
   title: string;
-  completed: boolean;
+  user_id: string;
+  created_at: string;
+};
+
+export type HabitWithLogsFromDB = {
+  id: string;
+  title: string;
+  habit_logs:
+    | {
+        date: string;
+        completed: boolean;
+      }[]
+    | null;
 };
 
 export const habitsService = {
-  getAll(): Habit[] {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
+  async getHabitsWithLogs(userId: string): Promise<HabitWithLogsFromDB[]> {
+    const {data, error} = await supabase
+      .from("habits")
+      .select(
+        `
+      id,
+      title,
+      habit_logs (
+        date,
+        completed
+      )
+    `,
+      )
+      .eq("user_id", userId);
+
+    if (error) {
+      console.error(error);
       return [];
     }
+
+    return (data ?? []) as HabitWithLogsFromDB[];
   },
 
-  saveAll(habits: Habit[]) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(habits));
+  async addHabit(title: string, userId: string) {
+    const {data, error} = await supabase
+      .from("habits")
+      .insert([
+        {
+          title,
+          user_id: userId,
+        },
+      ])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("addHabit error:", error);
+      return null;
+    }
+
+    return data;
+  },
+
+  async deleteHabit(id: string) {
+    const {error} = await supabase.from("habits").delete().eq("id", id);
+
+    if (error) {
+      console.error("deleteHabit error:", error);
+      return false;
+    }
+
+    return true;
+  },
+
+  async getHabitLogForToday(habitId: string, date: string) {
+    const {data, error} = await supabase
+      .from("habit_logs")
+      .select("*")
+      .eq("habit_id", habitId)
+      .eq("date", date)
+      .maybeSingle();
+
+    if (error) {
+      console.error(error);
+      return null;
+    }
+
+    return data;
+  },
+
+  async toggleHabitLog(habitId: string) {
+    const today = new Date().toISOString().slice(0, 10);
+
+    const existing = await this.getHabitLogForToday(habitId, today);
+
+    if (existing) {
+      const {error} = await supabase.from("habit_logs").delete().eq("id", existing.id);
+
+      if (error) {
+        console.error(error);
+        return false;
+      }
+
+      return true;
+    }
+
+    const {error} = await supabase.from("habit_logs").insert([
+      {
+        habit_id: habitId,
+        date: today,
+        completed: true,
+      },
+    ]);
+
+    if (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
   },
 };

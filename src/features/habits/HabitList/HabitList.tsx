@@ -1,19 +1,19 @@
 import {HabitItem} from "../HabitItem/HabitItem";
+import type {Habit} from "../model/types";
 import styles from "./HabitList.module.scss";
-
-type Habit = {
-  id: number;
-  title: string;
-  completed: boolean;
-};
 
 type Props = {
   habits: Habit[];
-  onToggle: (id: number) => void;
-  onDelete: (id: number) => void;
+  onToggle: (id: string) => void;
+  onDelete: (id: string) => void;
+  loading: boolean;
 };
 
-export const HabitList = ({habits, onToggle, onDelete}: Props) => {
+export const HabitList = ({habits, onToggle, onDelete, loading}: Props) => {
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   if (habits.length === 0) {
     return (
       <div className={styles.empty}>
@@ -28,10 +28,11 @@ export const HabitList = ({habits, onToggle, onDelete}: Props) => {
       {habits.map((habit) => (
         <HabitItem
           key={habit.id}
+          id={habit.id}
           title={habit.title}
           completed={habit.completed}
-          onToggle={() => onToggle(habit.id)}
-          onDelete={() => onDelete(habit.id)}
+          onToggle={onToggle}
+          onDelete={onDelete}
         />
       ))}
     </div>
