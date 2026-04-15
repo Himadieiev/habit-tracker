@@ -13,6 +13,31 @@ export const useHabits = () => {
   const [filter, setFilter] = useState<Filter>("all");
   const [loading, setLoading] = useState(true);
 
+  const calculateStreak = (logs: {date: string; completed: boolean}[]) => {
+    const sorted = [...logs]
+      .filter((l) => l.completed)
+      .sort((a, b) => b.date.localeCompare(a.date));
+
+    let streak = 0;
+    let currentDate = new Date();
+
+    for (const log of sorted) {
+      const logDate = new Date(log.date);
+
+      const diff =
+        (currentDate.setHours(0, 0, 0, 0) - logDate.setHours(0, 0, 0, 0)) / (1000 * 60 * 60 * 24);
+
+      if (diff === 0 || diff === 1) {
+        streak++;
+        currentDate = logDate;
+      } else {
+        break;
+      }
+    }
+
+    return streak;
+  };
+
   useEffect(() => {
     if (!user) return;
 
@@ -26,10 +51,13 @@ export const useHabits = () => {
       const mapped = data.map((h) => {
         const completedToday = h.habit_logs?.some((log) => log.date === today && log.completed);
 
+        const streak = calculateStreak(h.habit_logs ?? []);
+
         return {
           id: h.id,
           title: h.title,
           completed: !!completedToday,
+          streak,
         };
       });
 
@@ -50,6 +78,7 @@ export const useHabits = () => {
         id: newHabit.id,
         title: newHabit.title,
         completed: false,
+        streak: 0,
       },
       ...prev,
     ]);
