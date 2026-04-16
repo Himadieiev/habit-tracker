@@ -3,4 +3,8 @@ export type Habit = {
   title: string;
   completed: boolean;
   streak: number;
+  logs: {
+    date: string;
+    completed: boolean;
+  }[];
 };

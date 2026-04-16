@@ -49,15 +49,18 @@ export const useHabits = () => {
       const today = new Date().toISOString().slice(0, 10);
 
       const mapped = data.map((h) => {
-        const completedToday = h.habit_logs?.some((log) => log.date === today && log.completed);
+        const logs = h.habit_logs ?? [];
 
-        const streak = calculateStreak(h.habit_logs ?? []);
+        const completedToday = logs.some((log) => log.date === today && log.completed);
+
+        const streak = calculateStreak(logs);
 
         return {
           id: h.id,
           title: h.title,
           completed: !!completedToday,
           streak,
+          logs,
         };
       });
 
@@ -79,6 +82,7 @@ export const useHabits = () => {
         title: newHabit.title,
         completed: false,
         streak: 0,
+        logs: [],
       },
       ...prev,
     ]);
@@ -93,11 +97,36 @@ export const useHabits = () => {
   };
 
   const toggleHabit = async (id: string) => {
+    const today = new Date().toISOString().slice(0, 10);
+
+    setHabits((prev) =>
+      prev.map((h) => {
+        if (h.id !== id) return h;
+
+        const exists = h.logs.some((l) => l.date === today);
+
+        let newLogs;
+
+        if (exists) {
+          newLogs = h.logs.filter((l) => l.date !== today);
+        } else {
+          newLogs = [...h.logs, {date: today, completed: true}];
+        }
+
+        return {
+          ...h,
+          logs: newLogs,
+          completed: !exists,
+          streak: calculateStreak(newLogs),
+        };
+      }),
+    );
+
     const success = await habitsService.toggleHabitLog(id);
 
-    if (!success) return;
-
-    setHabits((prev) => prev.map((h) => (h.id === id ? {...h, completed: !h.completed} : h)));
+    if (!success) {
+      console.error("toggle failed");
+    }
   };
 
   const filteredHabits = habits.filter((habit) => {

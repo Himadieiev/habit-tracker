@@ -34,6 +34,7 @@ export const HabitList = ({habits, onToggle, onDelete, loading}: Props) => {
           onToggle={onToggle}
           onDelete={onDelete}
           streak={habit.streak}
+          logs={habit.logs}
         />
       ))}
     </div>
