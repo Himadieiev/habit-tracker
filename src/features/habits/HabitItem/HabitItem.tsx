@@ -1,3 +1,4 @@
+import {useNavigate} from "react-router-dom";
 import classNames from "classnames";
 
 import {Button} from "@/components/Button";
@@ -25,6 +26,8 @@ export const HabitItem = ({
   onToggle,
   onDelete,
 }: HabitItemProps) => {
+  const navigate = useNavigate();
+
   const getLastDays = (logs: {date: string; completed: boolean}[]) => {
     const days: {date: string; completed: boolean}[] = [];
 
@@ -54,7 +57,7 @@ export const HabitItem = ({
         [styles.completed]: completed,
       })}
     >
-      <div className={styles.top}>
+      <div className={styles.top} onClick={() => navigate(`/habit/${id}`)}>
         <span className={styles.title}>{title}</span>
         <span className={styles.streak}>🔥 {streak} days</span>
       </div>

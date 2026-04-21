@@ -1,8 +1,8 @@
-import {Navigate} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
 
 import {useAuth} from "@/features/auth/model/useAuth";
 
-export const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
+export const ProtectedRoute = () => {
   const {user, loading} = useAuth();
 
   if (loading) return null;
@@ -11,5 +11,5 @@ export const ProtectedRoute = ({children}: {children: React.ReactNode}) => {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  return <Outlet />;
 };

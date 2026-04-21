@@ -1,8 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
 
+import {ProtectedRoute} from "@/features/auth/ui/ProtectedRoute";
 import {LoginPage} from "@/pages/LoginPage/LoginPage";
 import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
-import {ProtectedRoute} from "@/features/auth/ui/ProtectedRoute";
+import {HabitDetailPage} from "@/pages/HabitDetailPage/HabitDetailPage";
 
 export const router = createBrowserRouter([
   {
@@ -10,11 +11,16 @@ export const router = createBrowserRouter([
     element: <LoginPage />,
   },
   {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <HabitsPage />
-      </ProtectedRoute>
-    ),
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: "/",
+        element: <HabitsPage />,
+      },
+      {
+        path: "/habit/:id",
+        element: <HabitDetailPage />,
+      },
+    ],
   },
 ]);
