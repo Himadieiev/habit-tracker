@@ -67,6 +67,33 @@ export const HabitDetailPage = () => {
     return result;
   }, [habit]);
 
+  const toggleByDate = async (date: string) => {
+    if (!habit) return;
+
+    const success = await habitsService.toggleHabitLogByDate(habit.id, date);
+
+    if (!success) return;
+
+    setHabit((prev) => {
+      if (!prev) return prev;
+
+      const exists = prev.logs.find((l) => l.date === date);
+
+      let newLogs;
+
+      if (exists) {
+        newLogs = prev.logs.filter((l) => l.date !== date);
+      } else {
+        newLogs = [...prev.logs, {date, completed: true}];
+      }
+
+      return {
+        ...prev,
+        logs: newLogs,
+      };
+    });
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
   }
@@ -88,6 +115,7 @@ export const HabitDetailPage = () => {
             key={day.date}
             className={classNames(styles.day, {[styles.done]: day.completed})}
             title={day.date}
+            onClick={() => toggleByDate(day.date)}
           />
         ))}
       </div>

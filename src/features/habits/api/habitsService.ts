@@ -144,4 +144,44 @@ export const habitsService = {
 
     return true;
   },
+
+  async toggleHabitLogByDate(habitId: string, date: string) {
+    const {data: existing, error: fetchError} = await supabase
+      .from("habit_logs")
+      .select("*")
+      .eq("habit_id", habitId)
+      .eq("date", date)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error(fetchError);
+      return false;
+    }
+
+    if (existing) {
+      const {error} = await supabase.from("habit_logs").delete().eq("id", existing.id);
+
+      if (error) {
+        console.error(error);
+        return false;
+      }
+
+      return true;
+    }
+
+    const {error} = await supabase.from("habit_logs").insert([
+      {
+        habit_id: habitId,
+        date,
+        completed: true,
+      },
+    ]);
+
+    if (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
+  },
 };

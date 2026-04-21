@@ -29,14 +29,15 @@
     aspect-ratio: 1 / 1;
     border-radius: 4px;
 
-    background: var(--color-bg-secondary);
+    background: var(--color-bg-tertiary);
     border: 1px solid var(--color-border);
 
     transition: 0.2s;
+    cursor: pointer;
 }
 
 .day:hover {
-    transform: scale(1.1);
+    opacity: 0.3;
 }
 
 .done {
