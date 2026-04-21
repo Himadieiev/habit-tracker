@@ -42,6 +42,30 @@ export const habitsService = {
     return (data ?? []) as HabitWithLogsFromDB[];
   },
 
+  async getHabitById(id: string) {
+    const {data, error} = await supabase
+      .from("habits")
+      .select(
+        `
+      id,
+      title,
+      habit_logs (
+        date,
+        completed
+      )
+    `,
+      )
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("getHabitById error:", error);
+      return null;
+    }
+
+    return data;
+  },
+
   async addHabit(title: string, userId: string) {
     const {data, error} = await supabase
       .from("habits")
