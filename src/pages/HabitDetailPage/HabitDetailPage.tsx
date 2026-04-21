@@ -16,6 +16,7 @@ export const HabitDetailPage = () => {
 
   const [habit, setHabit] = useState<HabitBase | null>(null);
   const [loading, setLoading] = useState(true);
+  const [animatedWidth, setAnimatedWidth] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -83,6 +84,22 @@ export const HabitDetailPage = () => {
     };
   }, [habit]);
 
+  const getProgressColor = (rate: number) => {
+    if (rate < 30) return "low";
+    if (rate < 70) return "medium";
+    return "high";
+  };
+
+  useEffect(() => {
+    if (!stats) return;
+
+    const timeout = setTimeout(() => {
+      setAnimatedWidth(stats.completionRate);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [stats]);
+
   const toggleByDate = async (date: string) => {
     if (!habit) return;
 
@@ -144,6 +161,18 @@ export const HabitDetailPage = () => {
         <div className={styles.stat}>
           <span className={styles.statValue}>{stats.bestStreak}</span>
           <span className={styles.statLabel}>Best streak</span>
+        </div>
+      </div>
+
+      <div className={styles.progress}>
+        <div className={styles.progressBar}>
+          <div
+            className={classNames(
+              styles.progressFill,
+              styles[getProgressColor(stats.completionRate)],
+            )}
+            style={{width: `${animatedWidth}%`}}
+          />
         </div>
       </div>
 
