@@ -2,24 +2,19 @@ import {useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router-dom";
 import classNames from "classnames";
 
+import {
+  calculateBestStreak,
+  calculateCurrentStreak,
+  calculateStats,
+} from "@/features/habits/utils/habitStats";
 import {habitsService} from "@/features/habits/api/habitsService";
+import type {HabitBase} from "@/features/habits/model/types";
 import styles from "./HabitDetailPage.module.scss";
-
-type Log = {
-  date: string;
-  completed: boolean;
-};
-
-type Habit = {
-  id: string;
-  title: string;
-  logs: Log[];
-};
 
 export const HabitDetailPage = () => {
   const {id} = useParams();
 
-  const [habit, setHabit] = useState<Habit | null>(null);
+  const [habit, setHabit] = useState<HabitBase | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -67,6 +62,27 @@ export const HabitDetailPage = () => {
     return result;
   }, [habit]);
 
+  const stats = useMemo(() => {
+    if (!habit) {
+      return {
+        completedDays: 0,
+        completionRate: 0,
+        currentStreak: 0,
+        bestStreak: 0,
+      };
+    }
+
+    const totalDays = 90;
+
+    const base = calculateStats(habit.logs, totalDays);
+
+    return {
+      ...base,
+      currentStreak: calculateCurrentStreak(habit.logs),
+      bestStreak: calculateBestStreak(habit.logs),
+    };
+  }, [habit]);
+
   const toggleByDate = async (date: string) => {
     if (!habit) return;
 
@@ -107,6 +123,28 @@ export const HabitDetailPage = () => {
       <div className={styles.header}>
         <h1 className={styles.title}>{habit.title}</h1>
         <span className={styles.subtitle}>Last 90 days</span>
+      </div>
+
+      <div className={styles.stats}>
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{stats.completionRate}%</span>
+          <span className={styles.statLabel}>Completion</span>
+        </div>
+
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{stats.completedDays}</span>
+          <span className={styles.statLabel}>Days done</span>
+        </div>
+
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{stats.currentStreak}</span>
+          <span className={styles.statLabel}>Current streak</span>
+        </div>
+
+        <div className={styles.stat}>
+          <span className={styles.statValue}>{stats.bestStreak}</span>
+          <span className={styles.statLabel}>Best streak</span>
+        </div>
       </div>
 
       <div className={styles.grid}>
