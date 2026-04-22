@@ -32,7 +32,8 @@ export const habitsService = {
       )
     `,
       )
-      .eq("user_id", userId);
+      .eq("user_id", userId)
+      .order("created_at", {ascending: false});
 
     if (error) {
       console.error(error);
@@ -176,6 +177,17 @@ export const habitsService = {
         completed: true,
       },
     ]);
+
+    if (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
+  },
+
+  async updateHabitTitle(id: string, title: string) {
+    const {error} = await supabase.from("habits").update({title}).eq("id", id);
 
     if (error) {
       console.error(error);

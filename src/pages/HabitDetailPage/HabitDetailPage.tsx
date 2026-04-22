@@ -17,6 +17,8 @@ export const HabitDetailPage = () => {
   const [habit, setHabit] = useState<HabitBase | null>(null);
   const [loading, setLoading] = useState(true);
   const [animatedWidth, setAnimatedWidth] = useState(0);
+  const [isEditing, setIsEditing] = useState(false);
+  const [titleValue, setTitleValue] = useState("");
 
   useEffect(() => {
     if (!id) return;
@@ -36,6 +38,8 @@ export const HabitDetailPage = () => {
         title: data.title,
         logs: data.habit_logs ?? [],
       });
+
+      setTitleValue(data.title);
 
       setLoading(false);
     })();
@@ -127,6 +131,28 @@ export const HabitDetailPage = () => {
     });
   };
 
+  const saveTitle = async () => {
+    if (!habit) return;
+
+    const trimmed = titleValue.trim();
+
+    if (!trimmed || trimmed === habit.title) {
+      setIsEditing(false);
+      setTitleValue(habit.title);
+      return;
+    }
+
+    setHabit((prev) => (prev ? {...prev, title: trimmed} : prev));
+
+    const success = await habitsService.updateHabitTitle(habit.id, trimmed);
+
+    if (!success) {
+      setHabit((prev) => (prev ? {...prev, title: habit.title} : prev));
+    }
+
+    setIsEditing(false);
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
   }
@@ -138,7 +164,26 @@ export const HabitDetailPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{habit.title}</h1>
+        {isEditing ? (
+          <input
+            className={styles.input}
+            value={titleValue}
+            autoFocus
+            onChange={(e) => setTitleValue(e.target.value)}
+            onBlur={saveTitle}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") saveTitle();
+              if (e.key === "Escape") {
+                setIsEditing(false);
+                setTitleValue(habit.title);
+              }
+            }}
+          />
+        ) : (
+          <h1 className={styles.title} onClick={() => setIsEditing(true)}>
+            {habit.title}
+          </h1>
+        )}
         <span className={styles.subtitle}>Last 90 days</span>
       </div>
 

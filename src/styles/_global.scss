@@ -102,7 +102,7 @@ a {
 }
 
 /* FOCUS */
-:focus-visible {
+:focus-visible:not(input) {
     outline: 2px dashed var(--color-white);
     outline-offset: 4px;
     transition-duration: 0s !important;
