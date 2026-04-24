@@ -6,6 +6,23 @@
     gap: 16px;
 }
 
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.userBlock {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.userEmail {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
 .title {
     margin-bottom: 16px;
     color: var(--color-white);
