@@ -9,9 +9,15 @@
 }
 
 .title {
+    display: flex;
+    align-items: center;
+
     height: 40px;
+    margin: 0;
 
     font-size: var(--text-xl);
+    font-weight: 600;
+
     color: var(--color-white);
     cursor: pointer;
 }
@@ -27,12 +33,13 @@
 
     font-size: var(--text-xl);
     font-weight: 600;
+    line-height: 1;
 
     background: transparent;
     border: 1px solid var(--color-border);
     border-radius: 6px;
 
-    padding: 4px 8px;
+    padding: 0 8px;
     color: var(--color-white);
 
     outline: none;
@@ -40,6 +47,40 @@
 
 .input:focus {
     border-color: var(--color-accent);
+}
+
+.headerTop {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.headerTop>*:first-child {
+    flex: 1;
+}
+
+.deleteButton {
+    height: 36px;
+    padding: 0 12px;
+
+    font-size: 12px;
+    font-weight: 500;
+
+    color: var(--color-white);
+    background: transparent;
+
+    border: 1px solid var(--color-danger);
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.deleteButton:hover {
+    background: var(--color-danger);
+    color: var(--color-bg);
 }
 
 .subtitle {

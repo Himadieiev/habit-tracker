@@ -1,5 +1,5 @@
 import {useEffect, useMemo, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useParams, useNavigate} from "react-router-dom";
 import classNames from "classnames";
 
 import {
@@ -13,6 +13,7 @@ import styles from "./HabitDetailPage.module.scss";
 
 export const HabitDetailPage = () => {
   const {id} = useParams();
+  const navigate = useNavigate();
 
   const [habit, setHabit] = useState<HabitBase | null>(null);
   const [loading, setLoading] = useState(true);
@@ -153,6 +154,20 @@ export const HabitDetailPage = () => {
     setIsEditing(false);
   };
 
+  const handleDelete = async () => {
+    if (!habit) return;
+
+    const confirmed = window.confirm("Delete this habit?");
+
+    if (!confirmed) return;
+
+    const success = await habitsService.deleteHabit(habit.id);
+
+    if (!success) return;
+
+    navigate("/");
+  };
+
   if (loading) {
     return <div className={styles.loading}>Loading...</div>;
   }
@@ -164,26 +179,32 @@ export const HabitDetailPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.header}>
-        {isEditing ? (
-          <input
-            className={styles.input}
-            value={titleValue}
-            autoFocus
-            onChange={(e) => setTitleValue(e.target.value)}
-            onBlur={saveTitle}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") saveTitle();
-              if (e.key === "Escape") {
-                setIsEditing(false);
-                setTitleValue(habit.title);
-              }
-            }}
-          />
-        ) : (
-          <h1 className={styles.title} onClick={() => setIsEditing(true)}>
-            {habit.title}
-          </h1>
-        )}
+        <div className={styles.headerTop}>
+          {isEditing ? (
+            <input
+              className={styles.input}
+              value={titleValue}
+              autoFocus
+              onChange={(e) => setTitleValue(e.target.value)}
+              onBlur={saveTitle}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") saveTitle();
+                if (e.key === "Escape") {
+                  setIsEditing(false);
+                  setTitleValue(habit.title);
+                }
+              }}
+            />
+          ) : (
+            <h1 className={styles.title} onClick={() => setIsEditing(true)}>
+              {habit.title}
+            </h1>
+          )}
+          <button className={styles.deleteButton} onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+
         <span className={styles.subtitle}>Last 90 days</span>
       </div>
 
