@@ -9,6 +9,7 @@ import {
 } from "@/features/habits/utils/habitStats";
 import {habitsService} from "@/features/habits/api/habitsService";
 import type {HabitBase} from "@/features/habits/model/types";
+import {ConfirmModal} from "@/components/ConfirmModal";
 import styles from "./HabitDetailPage.module.scss";
 
 export const HabitDetailPage = () => {
@@ -20,6 +21,7 @@ export const HabitDetailPage = () => {
   const [animatedWidth, setAnimatedWidth] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
   const [titleValue, setTitleValue] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -157,10 +159,6 @@ export const HabitDetailPage = () => {
   const handleDelete = async () => {
     if (!habit) return;
 
-    const confirmed = window.confirm("Delete this habit?");
-
-    if (!confirmed) return;
-
     const success = await habitsService.deleteHabit(habit.id);
 
     if (!success) return;
@@ -200,7 +198,7 @@ export const HabitDetailPage = () => {
               {habit.title}
             </h1>
           )}
-          <button className={styles.deleteButton} onClick={handleDelete}>
+          <button className={styles.deleteButton} onClick={() => setConfirmOpen(true)}>
             Delete
           </button>
         </div>
@@ -252,6 +250,14 @@ export const HabitDetailPage = () => {
           />
         ))}
       </div>
+
+      <ConfirmModal
+        open={confirmOpen}
+        title="Delete habit?"
+        description="This action cannot be undone."
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 };
