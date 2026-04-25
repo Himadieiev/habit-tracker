@@ -7,6 +7,7 @@ export type HabitBase = {
   id: string;
   title: string;
   logs: Log[];
+  order: number;
 };
 
 export type Habit = HabitBase & {

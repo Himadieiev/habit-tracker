@@ -8,7 +8,8 @@ import {supabase} from "@/lib/supabaseClient";
 import styles from "./HabitsPage.module.scss";
 
 export const HabitsPage = () => {
-  const {habits, filter, setFilter, toggleHabit, addHabit, deleteHabit, loading} = useHabits();
+  const {habits, filter, setFilter, toggleHabit, addHabit, deleteHabit, reorderHabits, loading} =
+    useHabits();
   const {user} = useAuth();
 
   return (
@@ -28,7 +29,13 @@ export const HabitsPage = () => {
 
       <HabitFilters value={filter} onChange={setFilter} />
 
-      <HabitList habits={habits} onToggle={toggleHabit} onDelete={deleteHabit} loading={loading} />
+      <HabitList
+        habits={habits}
+        onToggle={toggleHabit}
+        onDelete={deleteHabit}
+        onReorder={reorderHabits}
+        loading={loading}
+      />
     </div>
   );
 };

@@ -15,6 +15,8 @@ type HabitItemProps = {
   }[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onDragStart: (e: React.DragEvent, id: string) => void;
+  onDrop: (e: React.DragEvent, id: string) => void;
 };
 
 export const HabitItem = ({
@@ -25,6 +27,8 @@ export const HabitItem = ({
   logs,
   onToggle,
   onDelete,
+  onDragStart,
+  onDrop,
 }: HabitItemProps) => {
   const navigate = useNavigate();
 
@@ -56,8 +60,13 @@ export const HabitItem = ({
       className={classNames(styles.item, {
         [styles.completed]: completed,
       })}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => onDrop(e, id)}
     >
       <div className={styles.top} onClick={() => navigate(`/habit/${id}`)}>
+        <span className={styles.dragHandle} draggable onDragStart={(e) => onDragStart(e, id)}>
+          ⋮⋮
+        </span>
         <span className={styles.title}>{title}</span>
         <span className={styles.streak}>🔥 {streak} days</span>
       </div>

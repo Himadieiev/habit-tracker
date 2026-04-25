@@ -10,6 +10,7 @@ export type HabitFromDB = {
 export type HabitWithLogsFromDB = {
   id: string;
   title: string;
+  order: number;
   habit_logs:
     | {
         date: string;
@@ -26,6 +27,7 @@ export const habitsService = {
         `
       id,
       title,
+      order,
       habit_logs (
         date,
         completed
@@ -33,7 +35,7 @@ export const habitsService = {
     `,
       )
       .eq("user_id", userId)
-      .order("created_at", {ascending: false});
+      .order("order", {ascending: true});
 
     if (error) {
       console.error(error);
@@ -43,13 +45,14 @@ export const habitsService = {
     return (data ?? []) as HabitWithLogsFromDB[];
   },
 
-  async getHabitById(id: string) {
+  async getHabitById(id: string): Promise<HabitWithLogsFromDB | null> {
     const {data, error} = await supabase
       .from("habits")
       .select(
         `
       id,
       title,
+      order,
       habit_logs (
         date,
         completed
@@ -68,15 +71,26 @@ export const habitsService = {
   },
 
   async addHabit(title: string, userId: string) {
+    const {data: lastHabit} = await supabase
+      .from("habits")
+      .select("order")
+      .eq("user_id", userId)
+      .order("order", {ascending: false})
+      .limit(1)
+      .maybeSingle();
+
+    const newOrder = (lastHabit?.order ?? -10) + 10;
+
     const {data, error} = await supabase
       .from("habits")
       .insert([
         {
           title,
           user_id: userId,
+          order: newOrder,
         },
       ])
-      .select()
+      .select("id, title, order")
       .single();
 
     if (error) {
@@ -195,5 +209,17 @@ export const habitsService = {
     }
 
     return true;
+  },
+
+  async updateHabitsOrder(updates: {id: string; order: number}[]) {
+    const queries = updates.map((u) =>
+      supabase.from("habits").update({order: u.order}).eq("id", u.id),
+    );
+
+    const results = await Promise.all(queries);
+
+    results.forEach(({error}) => {
+      if (error) console.error(error);
+    });
   },
 };

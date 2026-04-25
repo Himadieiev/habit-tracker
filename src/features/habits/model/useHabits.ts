@@ -61,6 +61,7 @@ export const useHabits = () => {
           completed: !!completedToday,
           streak,
           logs,
+          order: h.order ?? 0,
         };
       });
 
@@ -77,14 +78,15 @@ export const useHabits = () => {
     if (!newHabit) return;
 
     setHabits((prev) => [
+      ...prev,
       {
         id: newHabit.id,
         title: newHabit.title,
         completed: false,
         streak: 0,
         logs: [],
+        order: newHabit.order,
       },
-      ...prev,
     ]);
   };
 
@@ -129,6 +131,17 @@ export const useHabits = () => {
     }
   };
 
+  const reorderHabits = async (newHabits: Habit[]) => {
+    setHabits(newHabits);
+
+    const updates = newHabits.map((h, index) => ({
+      id: h.id,
+      order: index * 10,
+    }));
+
+    await habitsService.updateHabitsOrder(updates);
+  };
+
   const filteredHabits = habits.filter((habit) => {
     if (filter === "active") return !habit.completed;
     if (filter === "completed") return habit.completed;
@@ -142,6 +155,7 @@ export const useHabits = () => {
     toggleHabit,
     addHabit,
     deleteHabit,
+    reorderHabits,
     loading,
   };
 };

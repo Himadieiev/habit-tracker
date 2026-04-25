@@ -9,11 +9,41 @@ type Props = {
   habits: Habit[];
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
+  onReorder: (habits: Habit[]) => void;
   loading: boolean;
 };
 
-export const HabitList = ({habits, onToggle, onDelete, loading}: Props) => {
+export const HabitList = ({habits, onToggle, onDelete, onReorder, loading}: Props) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
+
+  const handleDragStart = (e: React.DragEvent, id: string) => {
+    setDraggedId(id);
+
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDrop = (e: React.DragEvent, targetId: string) => {
+    e.preventDefault();
+
+    if (!draggedId || draggedId === targetId) return;
+
+    const newList = [...habits];
+
+    const fromIndex = newList.findIndex((h) => h.id === draggedId);
+    const toIndex = newList.findIndex((h) => h.id === targetId);
+
+    const [moved] = newList.splice(fromIndex, 1);
+    newList.splice(toIndex, 0, moved);
+
+    const updated = newList.map((h, index) => ({
+      ...h,
+      order: index * 10,
+    }));
+
+    onReorder(updated);
+    setDraggedId(null);
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -41,6 +71,8 @@ export const HabitList = ({habits, onToggle, onDelete, loading}: Props) => {
             onDelete={(id) => setDeleteId(id)}
             streak={habit.streak}
             logs={habit.logs}
+            onDragStart={(e, id) => handleDragStart(e, id)}
+            onDrop={(e, id) => handleDrop(e, id)}
           />
         ))}
       </div>
