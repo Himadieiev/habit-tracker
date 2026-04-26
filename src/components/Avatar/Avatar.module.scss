@@ -1,0 +1,27 @@
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent);
+    color: var(--color-bg);
+    font-weight: 600;
+    font-size: var(--text-md);
+    border: none;
+    cursor: pointer;
+    transition: opacity var(--transition);
+
+    &:hover {
+        opacity: 0.85;
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+}
+
+.initial {
+    line-height: 1;
+}
