@@ -1,4 +1,14 @@
+@use "@/styles/media" as *;
+
 .filters {
     display: flex;
     gap: 8px;
+
+    @include mobile-s {
+        gap: 6px;
+
+        button {
+            flex: 1;
+        }
+    }
 }
