@@ -18,16 +18,34 @@ export const AddHabitForm = ({onAdd}: Props) => {
     setValue("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleAdd();
+    }
+  };
+
+  const handleClear = () => {
+    setValue("");
+  };
+
   return (
     <div className={styles.form}>
-      <input
-        className={styles.input}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="New habit..."
-      />
+      <div className={styles.inputWrapper}>
+        <input
+          className={styles.input}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          onKeyDown={handleKeyDown}
+          placeholder="New habit..."
+        />
+        {value.length > 0 && (
+          <button className={styles.clearButton} onClick={handleClear} type="button">
+            ✕
+          </button>
+        )}
+      </div>
 
-      <Button onClick={handleAdd}>Add</Button>
+      <Button onClick={handleAdd}>Add habit</Button>
     </div>
   );
 };
