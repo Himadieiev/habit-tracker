@@ -39,7 +39,7 @@ export const useHabits = () => {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!user?.id) return;
 
     (async () => {
       setLoading(true);
@@ -68,7 +68,7 @@ export const useHabits = () => {
       setHabits(mapped);
       setLoading(false);
     })();
-  }, [user]);
+  }, [user?.id]);
 
   const addHabit = async (title: string) => {
     if (!user) return;
