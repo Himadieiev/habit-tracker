@@ -1,3 +1,5 @@
+@use "@/styles/mixins" as *;
+
 .avatar {
     width: 40px;
     height: 40px;
@@ -13,7 +15,7 @@
     cursor: pointer;
     transition: opacity var(--transition);
 
-    &:hover {
+    @include hover {
         opacity: 0.85;
     }
 

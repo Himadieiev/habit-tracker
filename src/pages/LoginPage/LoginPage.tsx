@@ -29,9 +29,13 @@ export const LoginPage = () => {
       <div className={styles.card}>
         <h1 className={styles.title}>Habit Tracker</h1>
 
-        <Button onClick={handleLogin} size="lg" fullWidth>
-          Continue with Google
-        </Button>
+        <p className={styles.description}>Track your daily habits and build lasting routines</p>
+
+        <div className={styles.buttonWrapper}>
+          <Button onClick={handleLogin} size="lg">
+            Continue with Google
+          </Button>
+        </div>
       </div>
     </div>
   );
