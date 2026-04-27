@@ -1,4 +1,4 @@
-import {useEffect, useMemo, useState} from "react";
+import {useEffect, useMemo, useState, useCallback} from "react";
 import {useParams, useNavigate} from "react-router-dom";
 import classNames from "classnames";
 
@@ -8,9 +8,11 @@ import {
   calculateStats,
 } from "@/features/habits/utils/habitStats";
 import {habitsService} from "@/features/habits/api/habitsService";
-import type {HabitBase} from "@/features/habits/model/types";
+import type {HabitBase, Log} from "@/features/habits/model/types";
 import {ConfirmModal} from "@/components/ConfirmModal";
 import styles from "./HabitDetailPage.module.scss";
+
+const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 export const HabitDetailPage = () => {
   const {id} = useParams();
@@ -49,16 +51,38 @@ export const HabitDetailPage = () => {
     })();
   }, [id]);
 
+  const formatDate = useCallback((dateStr: string) => {
+    const date = new Date(dateStr);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    return `${day}.${month}`;
+  }, []);
+
   const days = useMemo(() => {
     if (!habit) return [];
 
     const result: {date: string; completed: boolean}[] = [];
+    const totalDays = 30;
 
-    for (let i = 89; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-      const date = d.toISOString().slice(0, 10);
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - totalDays + 1);
+
+    const startDayOfWeek = startDate.getDay();
+    const startOffset = startDayOfWeek === 0 ? 6 : startDayOfWeek - 1;
+
+    const calendarStart = new Date(startDate);
+    calendarStart.setDate(startDate.getDate() - startOffset);
+
+    const currentDate = new Date(calendarStart);
+
+    while (currentDate <= today) {
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+      const day = String(currentDate.getDate()).padStart(2, "0");
+      const date = `${year}-${month}-${day}`;
 
       const log = habit.logs.find((l) => l.date === date);
 
@@ -66,6 +90,8 @@ export const HabitDetailPage = () => {
         date,
         completed: !!log?.completed,
       });
+
+      currentDate.setDate(currentDate.getDate() + 1);
     }
 
     return result;
@@ -81,7 +107,7 @@ export const HabitDetailPage = () => {
       };
     }
 
-    const totalDays = 90;
+    const totalDays = 30;
 
     const base = calculateStats(habit.logs, totalDays);
 
@@ -120,7 +146,7 @@ export const HabitDetailPage = () => {
 
       const exists = prev.logs.find((l) => l.date === date);
 
-      let newLogs;
+      let newLogs: Log[];
 
       if (exists) {
         newLogs = prev.logs.filter((l) => l.date !== date);
@@ -168,7 +194,13 @@ export const HabitDetailPage = () => {
   };
 
   if (loading) {
-    return <div className={styles.loading}>Loading...</div>;
+    return (
+      <div className={styles.loading}>
+        <div className={styles.skeleton}></div>
+        <div className={styles.skeleton}></div>
+        <div className={styles.skeleton}></div>
+      </div>
+    );
   }
 
   if (!habit) {
@@ -179,6 +211,9 @@ export const HabitDetailPage = () => {
     <div className={styles.page}>
       <div className={styles.header}>
         <div className={styles.headerTop}>
+          <button className={styles.backButton} onClick={() => navigate(-1)} aria-label="Go back">
+            ←
+          </button>
           {isEditing ? (
             <input
               className={styles.input}
@@ -204,7 +239,7 @@ export const HabitDetailPage = () => {
           </button>
         </div>
 
-        <span className={styles.subtitle}>Last 90 days</span>
+        <span className={styles.subtitle}>Last 30 days</span>
       </div>
 
       <div className={styles.stats}>
@@ -245,16 +280,41 @@ export const HabitDetailPage = () => {
         </div>
       </div>
 
-      <div className={styles.grid}>
-        {days.map((day) => (
-          <span
-            key={day.date}
-            className={classNames(styles.day, {[styles.done]: day.completed})}
-            title={day.date}
-            onClick={() => toggleByDate(day.date)}
-          />
-        ))}
+      <div className={styles.calendar}>
+        <div className={styles.weekdays}>
+          {WEEKDAYS.map((day) => (
+            <div key={day} className={styles.weekday}>
+              {day}
+            </div>
+          ))}
+        </div>
+
+        <div className={styles.daysGrid}>
+          {days.map((day) => (
+            <button
+              key={day.date}
+              className={classNames(styles.day, {
+                [styles.done]: day.completed,
+              })}
+              onClick={() => toggleByDate(day.date)}
+              aria-label={`Mark ${day.date} as ${day.completed ? "incomplete" : "complete"}`}
+            >
+              <span className={styles.dayDate}>{formatDate(day.date)}</span>
+            </button>
+          ))}
+        </div>
       </div>
+
+      <figure className={styles.legend} aria-label="Calendar legend">
+        <div className={styles.legendItem}>
+          <div className={classNames(styles.legendBox, styles.legendBoxDone)}></div>
+          <span className={styles.legendText}>Completed</span>
+        </div>
+        <div className={styles.legendItem}>
+          <div className={classNames(styles.legendBox, styles.legendBoxActive)}></div>
+          <span className={styles.legendText}>Active</span>
+        </div>
+      </figure>
 
       <ConfirmModal
         open={confirmOpen}
