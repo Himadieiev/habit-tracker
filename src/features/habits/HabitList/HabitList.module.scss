@@ -1,13 +1,19 @@
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
+@use "@/styles/media" as *;
 
 .list {
     display: flex;
     flex-direction: column;
     gap: 12px;
+
+    @include tablet-above {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    @include laptop-above {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
 .empty {
@@ -15,19 +21,17 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-    padding: 32px 16px;
+    padding: 48px 16px;
     border-radius: var(--radius-md);
-
     background: var(--color-bg-secondary);
     border: 1px dashed var(--color-border);
-
     text-align: center;
 }
 
 .emptyTitle {
     font-size: var(--text-lg);
     color: var(--color-white);
+    margin-bottom: 8px;
 }
 
 .emptyText {
