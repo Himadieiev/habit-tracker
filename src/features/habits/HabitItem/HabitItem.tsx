@@ -63,12 +63,17 @@ export const HabitItem = ({
       onDragOver={(e) => e.preventDefault()}
       onDrop={(e) => onDrop(e, id)}
     >
-      <div className={styles.top} onClick={() => navigate(`/habit/${id}`)}>
+      <div className={styles.top}>
         <span className={styles.dragHandle} draggable onDragStart={(e) => onDragStart(e, id)}>
           ⋮⋮
         </span>
-        <span className={styles.title}>{title}</span>
-        <span className={styles.streak}>🔥 {streak} days</span>
+        <span className={styles.title} onClick={() => navigate(`/habit/${id}`)}>
+          {title}
+        </span>
+        <span className={styles.streak}>
+          <span className={styles.streakLabel}>Current</span>
+          <span className={styles.streakValue}>🔥 {streak}</span>
+        </span>
       </div>
 
       <div className={styles.history}>
