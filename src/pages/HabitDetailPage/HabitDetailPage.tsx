@@ -230,6 +230,10 @@ export const HabitDetailPage = () => {
       </div>
 
       <div className={styles.progress}>
+        <div className={styles.progressHeader}>
+          <span className={styles.progressLabel}>Completion rate</span>
+          <span className={styles.progressPercent}>{stats.completionRate}%</span>
+        </div>
         <div className={styles.progressBar}>
           <div
             className={classNames(
