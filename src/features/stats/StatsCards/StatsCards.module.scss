@@ -1,0 +1,45 @@
+@use "@/styles/mixins" as *;
+@use "@/styles/media" as *;
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+.card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px 16px;
+    text-align: center;
+    transition: border-color var(--transition);
+
+    @include hover {
+        border-color: var(--color-accent);
+    }
+}
+
+.cardValue {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 8px;
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.cardLabel {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}

@@ -4,6 +4,7 @@ import {ProtectedRoute} from "@/features/auth/ui/ProtectedRoute";
 import {LoginPage} from "@/pages/LoginPage/LoginPage";
 import {HabitsPage} from "@/pages/HabitsPage/HabitsPage";
 import {HabitDetailPage} from "@/pages/HabitDetailPage/HabitDetailPage";
+import {StatsPage} from "@/pages/StatsPage/StatsPage";
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
       {
         path: "/habit/:id",
         element: <HabitDetailPage />,
+      },
+      {
+        path: "/stats",
+        element: <StatsPage />,
       },
     ],
   },
