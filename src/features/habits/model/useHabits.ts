@@ -62,6 +62,7 @@ export const useHabits = () => {
           streak,
           logs,
           order: h.order ?? 0,
+          createdAt: h.created_at,
         };
       });
 
@@ -86,6 +87,7 @@ export const useHabits = () => {
         streak: 0,
         logs: [],
         order: newHabit.order,
+        createdAt: new Date().toISOString(),
       },
     ]);
   };

@@ -43,6 +43,7 @@ export const HabitDetailPage = () => {
         title: data.title,
         logs: data.habit_logs ?? [],
         order: data.order,
+        createdAt: data.created_at,
       });
 
       setTitleValue(data.title);

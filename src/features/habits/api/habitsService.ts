@@ -11,6 +11,7 @@ export type HabitWithLogsFromDB = {
   id: string;
   title: string;
   order: number;
+  created_at: string;
   habit_logs:
     | {
         date: string;
@@ -28,6 +29,7 @@ export const habitsService = {
       id,
       title,
       order,
+      created_at,
       habit_logs (
         date,
         completed
@@ -53,6 +55,7 @@ export const habitsService = {
       id,
       title,
       order,
+      created_at,  
       habit_logs (
         date,
         completed
@@ -90,7 +93,7 @@ export const habitsService = {
           order: newOrder,
         },
       ])
-      .select("id, title, order")
+      .select("id, title, order, created_at")
       .single();
 
     if (error) {
