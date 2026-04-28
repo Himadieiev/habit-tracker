@@ -59,10 +59,28 @@ export const HabitDetailPage = () => {
     return `${day}.${month}`;
   }, []);
 
+  const activeDaysCount = (() => {
+    if (!habit?.createdAt) return 30;
+
+    const created = new Date(habit.createdAt);
+    created.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const diffTime = today.getTime() - created.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    return Math.min(30, diffDays);
+  })();
+
   const days = useMemo(() => {
     if (!habit) return [];
 
-    const result: {date: string; completed: boolean}[] = [];
+    const createdDate = habit.createdAt ? new Date(habit.createdAt) : null;
+    if (createdDate) createdDate.setHours(0, 0, 0, 0);
+
+    const result: {date: string; completed: boolean; isActive: boolean}[] = [];
     const totalDays = 30;
 
     const today = new Date();
@@ -85,11 +103,13 @@ export const HabitDetailPage = () => {
       const day = String(currentDate.getDate()).padStart(2, "0");
       const date = `${year}-${month}-${day}`;
 
-      const log = habit.logs.find((l) => l.date === date);
+      const isActive = createdDate ? currentDate >= createdDate : true;
+      const log = isActive ? habit.logs.find((l) => l.date === date) : null;
 
       result.push({
         date,
         completed: !!log?.completed,
+        isActive,
       });
 
       currentDate.setDate(currentDate.getDate() + 1);
@@ -108,16 +128,27 @@ export const HabitDetailPage = () => {
       };
     }
 
-    const totalDays = 30;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    const base = calculateStats(habit.logs, totalDays);
+    const startDate = new Date(today);
+    startDate.setDate(today.getDate() - activeDaysCount + 1);
+    startDate.setHours(0, 0, 0, 0);
+
+    const filteredLogs = habit.logs.filter((log) => {
+      const logDate = new Date(log.date);
+      logDate.setHours(0, 0, 0, 0);
+      return logDate >= startDate && logDate <= today;
+    });
+
+    const base = calculateStats(filteredLogs, activeDaysCount);
 
     return {
       ...base,
-      currentStreak: calculateCurrentStreak(habit.logs),
-      bestStreak: calculateBestStreak(habit.logs),
+      currentStreak: calculateCurrentStreak(filteredLogs),
+      bestStreak: calculateBestStreak(filteredLogs),
     };
-  }, [habit]);
+  }, [habit, activeDaysCount]);
 
   const getProgressColor = (rate: number) => {
     if (rate < 30) return "low";
@@ -135,8 +166,8 @@ export const HabitDetailPage = () => {
     return () => clearTimeout(timeout);
   }, [stats]);
 
-  const toggleByDate = async (date: string) => {
-    if (!habit) return;
+  const toggleByDate = async (date: string, isActive: boolean) => {
+    if (!habit || !isActive) return;
 
     const success = await habitsService.toggleHabitLogByDate(habit.id, date);
 
@@ -240,7 +271,7 @@ export const HabitDetailPage = () => {
           </button>
         </div>
 
-        <span className={styles.subtitle}>Last 30 days</span>
+        <span className={styles.subtitle}>Last {activeDaysCount} days</span>
       </div>
 
       <div className={styles.stats}>
@@ -296,11 +327,17 @@ export const HabitDetailPage = () => {
               key={day.date}
               className={classNames(styles.day, {
                 [styles.done]: day.completed,
+                [styles.inactive]: !day.isActive,
               })}
-              onClick={() => toggleByDate(day.date)}
-              aria-label={`Mark ${day.date} as ${day.completed ? "incomplete" : "complete"}`}
+              onClick={() => toggleByDate(day.date, day.isActive)}
+              aria-label={
+                day.isActive
+                  ? `Mark ${day.date} as ${day.completed ? "incomplete" : "complete"}`
+                  : `Not started yet`
+              }
+              disabled={!day.isActive}
             >
-              <span className={styles.dayDate}>{formatDate(day.date)}</span>
+              {day.isActive ? <span className={styles.dayDate}>{formatDate(day.date)}</span> : null}
             </button>
           ))}
         </div>
@@ -314,6 +351,10 @@ export const HabitDetailPage = () => {
         <div className={styles.legendItem}>
           <div className={classNames(styles.legendBox, styles.legendBoxActive)}></div>
           <span className={styles.legendText}>Active</span>
+        </div>
+        <div className={styles.legendItem}>
+          <div className={classNames(styles.legendBox, styles.legendBoxInactive)}></div>
+          <span className={styles.legendText}>Inactive</span>
         </div>
       </figure>
 
