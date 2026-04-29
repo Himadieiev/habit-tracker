@@ -1,4 +1,5 @@
 @use "@/styles/mixins" as *;
+@use "@/styles/media" as *;
 
 .container {
     background: var(--color-card-bg);
@@ -11,14 +12,77 @@
     font-size: var(--text-md);
     font-weight: 600;
     color: var(--color-white);
+    margin-bottom: 4px;
+}
+
+.subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
     margin-bottom: 16px;
 }
 
-.placeholder {
+.chartContainer {
+    width: 100%;
+}
+
+.grid {
+    stroke: var(--color-border-light);
+}
+
+.tooltip {
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 8px 12px;
+    box-shadow: var(--shadow-md);
+}
+
+.tooltipDay {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 4px;
+}
+
+.tooltipRate {
+    font-size: 11px;
+    color: var(--color-accent);
+    margin-bottom: 2px;
+}
+
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.legendItem {
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 200px;
+    gap: 6px;
+}
+
+.legendDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.high {
+    background: var(--color-success);
+}
+
+.medium {
+    background: var(--color-warning);
+}
+
+.low {
+    background: var(--color-danger);
+}
+
+.legendText {
+    font-size: 10px;
     color: var(--color-text-secondary);
-    font-size: var(--text-sm);
 }
