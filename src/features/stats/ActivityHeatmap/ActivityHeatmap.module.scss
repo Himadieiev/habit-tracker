@@ -1,24 +1,114 @@
 @use "@/styles/mixins" as *;
+@use "@/styles/media" as *;
 
 .container {
     background: var(--color-card-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: 20px;
+    overflow: hidden;
 }
 
 .title {
     font-size: var(--text-md);
     font-weight: 600;
     color: var(--color-white);
-    margin-bottom: 16px;
+    margin-bottom: 4px;
 }
 
-.placeholder {
+.subtitle {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+    margin-bottom: 20px;
+}
+
+.heatmapWrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 6px;
+}
+
+.calendar {
+    display: flex;
+    min-width: fit-content;
+}
+
+.weekdays {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 36px;
+    position: sticky;
+    left: 0;
+    background: var(--color-card-bg);
+    z-index: 1;
+}
+
+.weekday {
+    height: 14px;
+    font-size: 10px;
+    color: var(--color-text-secondary);
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 200px;
+    justify-content: flex-start;
+    padding-right: 8px;
+}
+
+.weeks {
+    display: flex;
+    gap: 4px;
+}
+
+.week {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.day {
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: opacity var(--transition);
+
+    @include hover {
+        opacity: 0.7;
+    }
+}
+
+.intensity0 {
+    background: var(--color-inactive);
+}
+
+.intensity1 {
+    background: rgba(255, 209, 26, 0.3);
+}
+
+.intensity2 {
+    background: rgba(255, 209, 26, 0.6);
+}
+
+.intensity3 {
+    background: var(--color-accent);
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.legendText {
+    font-size: 10px;
     color: var(--color-text-secondary);
-    font-size: var(--text-sm);
+}
+
+.legendBox {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
 }
