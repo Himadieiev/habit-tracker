@@ -19,7 +19,11 @@
 .subtitle {
     font-size: var(--text-xs);
     color: var(--color-text-secondary);
-    margin-bottom: 20px;
+    margin-bottom: 80px;
+
+    @include mobile {
+        margin-bottom: 20px;
+    }
 }
 
 .heatmapWrapper {
