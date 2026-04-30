@@ -1,4 +1,5 @@
 import {Navigate} from "react-router-dom";
+import {toast} from "sonner";
 
 import {Button} from "@/components/Button/Button";
 import {useAuth} from "@/features/auth/model/useAuth";
@@ -10,12 +11,17 @@ export const LoginPage = () => {
   const {user, loading} = useAuth();
 
   const handleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/`,
-      },
-    });
+    try {
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${window.location.origin}/`,
+        },
+      });
+    } catch (error) {
+      toast.error("Failed to sign in with Google");
+      console.error("Sign in error:", error);
+    }
   };
 
   if (loading) return null;

@@ -1,3 +1,5 @@
+import {toast} from "sonner";
+
 import {supabase} from "@/lib/supabaseClient";
 
 export type HabitFromDB = {
@@ -40,6 +42,7 @@ export const habitsService = {
       .order("order", {ascending: true});
 
     if (error) {
+      toast.error("Failed to load habits");
       console.error(error);
       return [];
     }
@@ -66,6 +69,7 @@ export const habitsService = {
       .single();
 
     if (error) {
+      toast.error("Failed to load habit details");
       console.error("getHabitById error:", error);
       return null;
     }
@@ -97,10 +101,12 @@ export const habitsService = {
       .single();
 
     if (error) {
+      toast.error("Failed to add habit");
       console.error("addHabit error:", error);
       return null;
     }
 
+    toast.success(`"${title}" habit added`);
     return data;
   },
 
@@ -108,10 +114,12 @@ export const habitsService = {
     const {error} = await supabase.from("habits").delete().eq("id", id);
 
     if (error) {
+      toast.error("Failed to delete habit");
       console.error("deleteHabit error:", error);
       return false;
     }
 
+    toast.success("Habit deleted");
     return true;
   },
 
@@ -140,10 +148,12 @@ export const habitsService = {
       const {error} = await supabase.from("habit_logs").delete().eq("id", existing.id);
 
       if (error) {
+        toast.error("Failed to mark habit as incomplete");
         console.error(error);
         return false;
       }
 
+      toast.success("Habit marked as incomplete");
       return true;
     }
 
@@ -156,10 +166,12 @@ export const habitsService = {
     ]);
 
     if (error) {
+      toast.error("Failed to mark habit as complete");
       console.error(error);
       return false;
     }
 
+    toast.success("Habit marked as complete");
     return true;
   },
 
@@ -172,6 +184,7 @@ export const habitsService = {
       .maybeSingle();
 
     if (fetchError) {
+      toast.error("Failed to update habit");
       console.error(fetchError);
       return false;
     }
@@ -180,10 +193,12 @@ export const habitsService = {
       const {error} = await supabase.from("habit_logs").delete().eq("id", existing.id);
 
       if (error) {
+        toast.error("Failed to mark day as incomplete");
         console.error(error);
         return false;
       }
 
+      toast.success("Day marked as incomplete");
       return true;
     }
 
@@ -196,10 +211,12 @@ export const habitsService = {
     ]);
 
     if (error) {
+      toast.error("Failed to mark day as complete");
       console.error(error);
       return false;
     }
 
+    toast.success("Day marked as complete");
     return true;
   },
 
@@ -207,10 +224,12 @@ export const habitsService = {
     const {error} = await supabase.from("habits").update({title}).eq("id", id);
 
     if (error) {
+      toast.error("Failed to update habit title");
       console.error(error);
       return false;
     }
 
+    toast.success("Habit title updated");
     return true;
   },
 
@@ -222,7 +241,10 @@ export const habitsService = {
     const results = await Promise.all(queries);
 
     results.forEach(({error}) => {
-      if (error) console.error(error);
+      if (error) {
+        toast.error("Failed to reorder habits");
+        console.error(error);
+      }
     });
   },
 };

@@ -1,4 +1,5 @@
 import {useEffect, useState} from "react";
+import {toast} from "sonner";
 
 import {useAuth} from "@/features/auth/model/useAuth";
 import {habitsService} from "../api/habitsService";
@@ -129,6 +130,7 @@ export const useHabits = () => {
     const success = await habitsService.toggleHabitLog(id);
 
     if (!success) {
+      toast.error("Failed to toggle habit");
       console.error("toggle failed");
     }
   };

@@ -1,4 +1,5 @@
 import {useState, useEffect, useRef} from "react";
+import {toast} from "sonner";
 
 import {useAuth} from "@/features/auth/model/useAuth";
 import {useHabits} from "@/features/habits/model/useHabits";
@@ -60,6 +61,16 @@ export const HabitsPage = () => {
   const firstName =
     user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
 
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      setIsMenuOpen(false);
+    } catch (error) {
+      toast.error("Failed to sign out");
+      console.error("Sign out error:", error);
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -74,13 +85,7 @@ export const HabitsPage = () => {
           {isMenuOpen && (
             <div className={styles.menu}>
               <div className={styles.menuEmail}>{user?.email}</div>
-              <button
-                className={styles.menuLogout}
-                onClick={() => {
-                  supabase.auth.signOut();
-                  setIsMenuOpen(false);
-                }}
-              >
+              <button className={styles.menuLogout} onClick={handleLogout}>
                 Logout
               </button>
             </div>
