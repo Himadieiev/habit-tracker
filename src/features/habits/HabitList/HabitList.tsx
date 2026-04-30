@@ -1,9 +1,9 @@
 import {useState} from "react";
 
 import {HabitItem} from "../HabitItem/HabitItem";
+import {ConfirmModal} from "@/components/ConfirmModal";
 import type {Habit} from "../model/types";
 import styles from "./HabitList.module.scss";
-import {ConfirmModal} from "@/components/ConfirmModal";
 
 type Props = {
   habits: Habit[];
@@ -46,7 +46,17 @@ export const HabitList = ({habits, onToggle, onDelete, onReorder, loading}: Prop
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className={styles.skeletonContainer}>
+        {[...Array(3)].map((_, i) => (
+          <div key={i} className={styles.skeletonCard}>
+            <div className={styles.skeletonTitle}></div>
+            <div className={styles.skeletonHistory}></div>
+            <div className={styles.skeletonActions}></div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (habits.length === 0) {
