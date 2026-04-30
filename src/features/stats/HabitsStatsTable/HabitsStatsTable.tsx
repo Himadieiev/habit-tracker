@@ -1,4 +1,5 @@
 import {useState, useMemo} from "react";
+import {useNavigate} from "react-router-dom";
 import classNames from "classnames";
 
 import type {Habit} from "@/features/habits/model/types";
@@ -29,6 +30,12 @@ const getCompletionRate = (habit: Habit): number => {
 export const HabitsStatsTable = ({habits}: HabitsStatsTableProps) => {
   const [sortField, setSortField] = useState<SortField>("title");
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+
+  const navigate = useNavigate();
+
+  const handleRowClick = (habitId: string) => {
+    navigate(`/habit/${habitId}`);
+  };
 
   const handleSort = (field: SortField) => {
     if (sortField === field) {
@@ -158,7 +165,11 @@ export const HabitsStatsTable = ({habits}: HabitsStatsTableProps) => {
               const completionColor = getCompletionColor(habit.completionRate);
 
               return (
-                <tr key={habit.id}>
+                <tr
+                  key={habit.id}
+                  onClick={() => handleRowClick(habit.id)}
+                  className={styles.clickableRow}
+                >
                   <td className={styles.habitTitle}>{habit.title}</td>
                   <td className={completionColor}>{Math.round(habit.completionRate)}%</td>
                   <td>{habit.completedDays}</td>
@@ -177,7 +188,7 @@ export const HabitsStatsTable = ({habits}: HabitsStatsTableProps) => {
           const completionColor = getCompletionColor(habit.completionRate);
 
           return (
-            <div key={habit.id} className={styles.card}>
+            <div key={habit.id} className={styles.card} onClick={() => handleRowClick(habit.id)}>
               <div className={styles.cardTitle}>{habit.title}</div>
               <div className={styles.cardRow}>
                 <span className={styles.cardLabel}>Completion</span>
