@@ -18,6 +18,12 @@ export const Navigation = () => {
       >
         Statistics
       </NavLink>
+      <NavLink
+        to="/profile"
+        className={({isActive}) => classNames(styles.link, {[styles.active]: isActive})}
+      >
+        Profile
+      </NavLink>
     </nav>
   );
 };
