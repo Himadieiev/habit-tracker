@@ -24,6 +24,7 @@ export const HabitDetailPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [titleValue, setTitleValue] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -218,7 +219,9 @@ export const HabitDetailPage = () => {
   const handleDelete = async () => {
     if (!habit) return;
 
+    setIsDeleting(true);
     const success = await habitsService.deleteHabit(habit.id);
+    setIsDeleting(false);
 
     if (!success) return;
 
@@ -362,6 +365,7 @@ export const HabitDetailPage = () => {
         open={confirmOpen}
         title="Delete habit?"
         description="This action cannot be undone."
+        isLoading={isDeleting}
         onCancel={() => setConfirmOpen(false)}
         onConfirm={handleDelete}
       />
