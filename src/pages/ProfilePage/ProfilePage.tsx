@@ -104,7 +104,12 @@ export const ProfilePage = () => {
         <div className={styles.section}>
           <div className={styles.avatarSection}>
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" className={styles.avatar} />
+              <img
+                src={avatarUrl}
+                alt="Avatar"
+                className={styles.avatar}
+                referrerPolicy="no-referrer"
+              />
             ) : (
               <div className={styles.avatarPlaceholder}>
                 <span className={styles.avatarInitial}>{firstName[0]?.toUpperCase()}</span>
