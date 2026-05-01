@@ -10,6 +10,7 @@ export const ConfirmModal = ({
   description,
   confirmText = "Delete",
   cancelText = "Cancel",
+  isLoading = false,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) => {
@@ -34,12 +35,12 @@ export const ConfirmModal = ({
         {description && <p className={styles.description}>{description}</p>}
 
         <div className={styles.actions}>
-          <button className={styles.cancel} onClick={onCancel}>
+          <button className={styles.cancel} onClick={onCancel} disabled={isLoading}>
             {cancelText}
           </button>
 
-          <button className={styles.confirm} onClick={onConfirm}>
-            {confirmText}
+          <button className={styles.confirm} onClick={onConfirm} disabled={isLoading}>
+            {isLoading ? "Deleting..." : confirmText}
           </button>
         </div>
       </div>

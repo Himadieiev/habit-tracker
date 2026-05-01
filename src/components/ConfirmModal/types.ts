@@ -6,6 +6,7 @@ export interface ConfirmModalProps {
   description?: ReactNode;
   confirmText?: string;
   cancelText?: string;
+  isLoading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
