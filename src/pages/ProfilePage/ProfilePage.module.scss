@@ -1,0 +1,189 @@
+@use "@/styles/mixins" as *;
+@use "@/styles/media" as *;
+
+.page {
+    padding: 24px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 32px;
+}
+
+.title {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 8px;
+
+    @include mobile {
+        font-size: var(--text-2xl);
+    }
+}
+
+.subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.section {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+}
+
+.sectionTitle {
+    font-size: var(--text-md);
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.avatarSection {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatarPlaceholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.avatarInitial {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--color-bg);
+}
+
+.userInfo {
+    flex: 1;
+}
+
+.userName {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--color-white);
+    margin-bottom: 4px;
+}
+
+.userEmail {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+
+    @include mobile {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include mobile-s {
+        grid-template-columns: 1fr;
+    }
+}
+
+.statCard {
+    background: var(--color-bg-secondary);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    text-align: center;
+}
+
+.statValue {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--color-white);
+    margin-bottom: 4px;
+
+    @include mobile {
+        font-size: 24px;
+    }
+}
+
+.statLabel {
+    font-size: var(--text-xs);
+    color: var(--color-text-secondary);
+}
+
+.actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.exportButton {
+    padding: 10px 20px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    @include hover {
+        border-color: var(--color-accent);
+        background: var(--color-bg-tertiary);
+        color: var(--color-accent);
+    }
+}
+
+.deleteButton {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    @include hover {
+        color: var(--color-danger);
+        border: 1px solid var(--color-danger);
+    }
+}
+
+.logoutButton {
+    padding: 10px 20px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    @include hover {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+        background: var(--color-bg-tertiary);
+    }
+}
