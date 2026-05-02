@@ -3,9 +3,7 @@ import {toast} from "sonner";
 
 import {useAuth} from "@/features/auth/model/useAuth";
 import {habitsService} from "../api/habitsService";
-import type {Habit} from "./types";
-
-type Filter = "all" | "active" | "completed";
+import type {Filter, Habit} from "./types";
 
 export const useHabits = () => {
   const {user} = useAuth();

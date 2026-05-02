@@ -1,7 +1,6 @@
 import {Button} from "@/components/Button/Button";
+import type {Filter} from "../model/types";
 import styles from "./HabitFilters.module.scss";
-
-type Filter = "all" | "active" | "completed";
 
 type Props = {
   value: Filter;

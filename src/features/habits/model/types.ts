@@ -15,3 +15,5 @@ export type Habit = HabitBase & {
   completed: boolean;
   streak: number;
 };
+
+export type Filter = "all" | "active" | "completed";
