@@ -1,4 +1,5 @@
 @use "@/styles/mixins" as *;
+@use "@/styles/media" as *;
 
 .page {
     padding: 24px;
@@ -82,23 +83,43 @@
 }
 
 .searchWrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.searchContainer {
     position: relative;
     width: 100%;
     max-width: 300px;
+
+    @include mobile-s {
+        max-width: none;
+        width: 100%;
+    }
+}
+
+.searchIcon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-secondary);
+    pointer-events: none;
 }
 
 .searchInput {
     width: 100%;
-    padding: 10px 32px 10px 12px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
-    background: var(--color-bg-secondary);
+    padding: 8px 32px 8px 32px;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
     color: var(--color-white);
     font-size: var(--text-sm);
     outline: none;
+    transition: border-color var(--transition);
 
     &:focus {
-        border-color: var(--color-accent);
+        border-bottom-color: var(--color-accent);
     }
 
     &::placeholder {
@@ -108,15 +129,17 @@
 
 .searchClear {
     position: absolute;
-    right: 8px;
+    right: 4px;
     top: 50%;
     transform: translateY(-50%);
     background: transparent;
     border: none;
     color: var(--color-text-secondary);
     cursor: pointer;
-    font-size: 14px;
     padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     @include hover {
         color: var(--color-white);
