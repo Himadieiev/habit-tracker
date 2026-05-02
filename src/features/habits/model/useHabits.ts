@@ -152,6 +152,7 @@ export const useHabits = () => {
 
   return {
     habits: filteredHabits,
+    allHabitsCount: habits.length,
     filter,
     setFilter,
     toggleHabit,

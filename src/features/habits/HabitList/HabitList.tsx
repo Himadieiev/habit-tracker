@@ -2,18 +2,28 @@ import {useState} from "react";
 
 import {HabitItem} from "../HabitItem/HabitItem";
 import {ConfirmModal} from "@/components/ConfirmModal";
-import type {Habit} from "../model/types";
+import type {Filter, Habit} from "../model/types";
 import styles from "./HabitList.module.scss";
 
 type Props = {
   habits: Habit[];
+  filter: Filter;
+  allHabitsCount: number;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onReorder: (habits: Habit[]) => void;
   loading: boolean;
 };
 
-export const HabitList = ({habits, onToggle, onDelete, onReorder, loading}: Props) => {
+export const HabitList = ({
+  habits,
+  filter,
+  allHabitsCount,
+  onToggle,
+  onDelete,
+  onReorder,
+  loading,
+}: Props) => {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
 
@@ -60,12 +70,26 @@ export const HabitList = ({habits, onToggle, onDelete, onReorder, loading}: Prop
   }
 
   if (habits.length === 0) {
-    return (
-      <div className={styles.empty}>
-        <p className={styles.emptyTitle}>No habits yet</p>
-        <span className={styles.emptyText}>Start by adding your first habit</span>
-      </div>
-    );
+    if (allHabitsCount === 0) {
+      return (
+        <div className={styles.empty}>
+          <p className={styles.emptyTitle}>No habits yet</p>
+          <span className={styles.emptyText}>Start by adding your first habit</span>
+        </div>
+      );
+    } else {
+      const messages = {
+        active: {title: "No active habits", text: "You've completed everything for today"},
+        completed: {title: "No completed habits", text: "Complete a habit to see it here"},
+      };
+      const message = messages[filter as "active" | "completed"];
+      return (
+        <div className={styles.empty}>
+          <p className={styles.emptyTitle}>{message.title}</p>
+          <span className={styles.emptyText}>{message.text}</span>
+        </div>
+      );
+    }
   }
 
   return (
