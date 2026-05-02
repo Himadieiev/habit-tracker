@@ -150,6 +150,41 @@ export const useHabits = () => {
     return true;
   });
 
+  const importHabits = async (
+    importedHabits: Array<{
+      title: string;
+      createdAt: string;
+      logs: Array<{date: string; completed: boolean}>;
+    }>,
+  ) => {
+    if (!user) return false;
+
+    const count = await habitsService.importHabits(user.id, importedHabits);
+
+    if (count > 0) {
+      const data = await habitsService.getHabitsWithLogs(user.id);
+      const today = new Date().toISOString().slice(0, 10);
+      const mapped = data.map((h) => {
+        const logs = h.habit_logs ?? [];
+        const completedToday = logs.some((log) => log.date === today && log.completed);
+        const streak = calculateStreak(logs);
+        return {
+          id: h.id,
+          title: h.title,
+          completed: !!completedToday,
+          streak,
+          logs,
+          order: h.order ?? 0,
+          createdAt: h.created_at,
+        };
+      });
+      setHabits(mapped);
+      return true;
+    }
+
+    return false;
+  };
+
   return {
     habits: filteredHabits,
     allHabitsCount: habits.length,
@@ -159,6 +194,7 @@ export const useHabits = () => {
     addHabit,
     deleteHabit,
     reorderHabits,
+    importHabits,
     loading,
   };
 };
