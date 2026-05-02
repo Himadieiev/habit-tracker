@@ -247,4 +247,88 @@ export const habitsService = {
       }
     });
   },
+
+  async importHabits(
+    userId: string,
+    habitsData: Array<{
+      title: string;
+      createdAt: string;
+      logs: Array<{date: string; completed: boolean}>;
+    }>,
+  ) {
+    const {data: maxOrderData} = await supabase
+      .from("habits")
+      .select("order")
+      .eq("user_id", userId)
+      .order("order", {ascending: false})
+      .limit(1)
+      .maybeSingle();
+
+    let nextOrder = (maxOrderData?.order ?? -10) + 10;
+    let importedCount = 0;
+    let skippedCount = 0;
+
+    for (const habitData of habitsData) {
+      const {data: existing} = await supabase
+        .from("habits")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("title", habitData.title)
+        .eq("created_at", habitData.createdAt)
+        .maybeSingle();
+
+      if (existing) {
+        skippedCount++;
+        continue;
+      }
+
+      const {data: habit, error: habitError} = await supabase
+        .from("habits")
+        .insert([
+          {
+            title: habitData.title,
+            user_id: userId,
+            created_at: habitData.createdAt,
+            order: nextOrder,
+          },
+        ])
+        .select("id, created_at")
+        .single();
+
+      if (habitError) {
+        console.error("Failed to import habit:", habitError);
+        continue;
+      }
+
+      nextOrder += 10;
+      importedCount++;
+
+      if (habitData.logs.length > 0) {
+        const logsToInsert = habitData.logs.map((log) => ({
+          habit_id: habit.id,
+          date: log.date,
+          completed: log.completed,
+        }));
+
+        const {error: logsError} = await supabase.from("habit_logs").insert(logsToInsert);
+        if (logsError) {
+          console.error("Failed to import logs for habit:", logsError);
+        }
+      }
+    }
+
+    if (importedCount > 0) {
+      toast.success(`Imported ${importedCount} habit${importedCount !== 1 ? "s" : ""}`);
+    }
+
+    if (skippedCount > 0) {
+      toast.info(`Skipped ${skippedCount} duplicate habit${skippedCount !== 1 ? "s" : ""}`);
+    }
+
+    if (importedCount === 0 && skippedCount === 0) {
+      toast.error("No habits were imported");
+    }
+
+    return importedCount;
+  },
 };
