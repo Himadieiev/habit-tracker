@@ -136,6 +136,27 @@
     display: flex;
     gap: 16px;
     flex-wrap: wrap;
+
+    button {
+        flex: 1;
+        min-width: 180px;
+        white-space: nowrap;
+    }
+
+    @include mobile {
+        button {
+            min-width: auto;
+            white-space: normal;
+        }
+    }
+
+    @include mobile-s {
+        flex-direction: column;
+
+        button {
+            width: 100%;
+        }
+    }
 }
 
 .exportButton {
@@ -172,6 +193,7 @@
 }
 
 .logoutButton {
+    max-width: 223px;
     padding: 10px 20px;
     background: var(--color-bg-secondary);
     border: 1px solid var(--color-border-light);
@@ -185,5 +207,31 @@
         border-color: var(--color-accent);
         color: var(--color-accent);
         background: var(--color-bg-tertiary);
+    }
+
+    @include mobile-s {
+        max-width: none;
+    }
+}
+
+.importButton {
+    padding: 10px 20px;
+    background: var(--color-bg-secondary);
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+
+    @include hover {
+        border-color: var(--color-accent);
+        background: var(--color-bg-tertiary);
+        color: var(--color-accent);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
     }
 }

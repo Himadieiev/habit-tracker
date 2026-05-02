@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useRef, useState} from "react";
 import {toast} from "sonner";
 import {useNavigate} from "react-router-dom";
 
@@ -11,10 +11,15 @@ import styles from "./ProfilePage.module.scss";
 
 export const ProfilePage = () => {
   const navigate = useNavigate();
-  const {user} = useAuth();
-  const {habits} = useHabits();
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [isImporting, setIsImporting] = useState(false);
   const [isDeleteDataModalOpen, setIsDeleteDataModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const {user} = useAuth();
+  const {habits, allHabitsCount, importHabits} = useHabits();
 
   const firstName =
     user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "User";
@@ -93,6 +98,33 @@ export const ProfilePage = () => {
     }
   };
 
+  const handleImport = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsImporting(true);
+    try {
+      const text = await file.text();
+      const data = JSON.parse(text);
+
+      if (!data.habits || !Array.isArray(data.habits)) {
+        toast.error("Invalid backup file format");
+        return;
+      }
+
+      await importHabits(data.habits);
+    } catch {
+      toast.error("Failed to parse backup file");
+    } finally {
+      setIsImporting(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.header}>
@@ -126,7 +158,7 @@ export const ProfilePage = () => {
           <h3 className={styles.sectionTitle}>Account Statistics</h3>
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statValue}>{habits.length}</div>
+              <div className={styles.statValue}>{allHabitsCount}</div>
               <div className={styles.statLabel}>Total Habits</div>
             </div>
             <div className={styles.statCard}>
@@ -143,6 +175,17 @@ export const ProfilePage = () => {
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>Data Management</h3>
           <div className={styles.actions}>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept=".json"
+              style={{display: "none"}}
+              onChange={handleFileUpload}
+            />
+
+            <button onClick={handleImport} className={styles.importButton} disabled={isImporting}>
+              {isImporting ? "Importing..." : "Import Data (JSON)"}
+            </button>
             <button onClick={handleExport} className={styles.exportButton}>
               Export Data (JSON)
             </button>
