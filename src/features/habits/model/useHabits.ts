@@ -11,6 +11,7 @@ export const useHabits = () => {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [filter, setFilter] = useState<Filter>("all");
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const calculateStreak = (logs: {date: string; completed: boolean}[]) => {
     const sorted = [...logs]
@@ -185,11 +186,18 @@ export const useHabits = () => {
     return false;
   };
 
+  const filteredBySearch = filteredHabits.filter((habit) =>
+    habit.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   return {
-    habits: filteredHabits,
+    habits: filteredBySearch,
     allHabitsCount: habits.length,
+    filteredCount: filteredHabits.length,
     filter,
     setFilter,
+    searchQuery,
+    setSearchQuery,
     toggleHabit,
     addHabit,
     deleteHabit,

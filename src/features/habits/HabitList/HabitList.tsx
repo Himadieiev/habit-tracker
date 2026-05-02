@@ -9,6 +9,7 @@ type Props = {
   habits: Habit[];
   filter: Filter;
   allHabitsCount: number;
+  filteredCount: number;
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onReorder: (habits: Habit[]) => void;
@@ -19,6 +20,7 @@ export const HabitList = ({
   habits,
   filter,
   allHabitsCount,
+  filteredCount,
   onToggle,
   onDelete,
   onReorder,
@@ -77,12 +79,14 @@ export const HabitList = ({
           <span className={styles.emptyText}>Start by adding your first habit</span>
         </div>
       );
-    } else {
+    }
+
+    if (filteredCount === 0 && (filter === "active" || filter === "completed")) {
       const messages = {
         active: {title: "No active habits", text: "You've completed everything for today"},
         completed: {title: "No completed habits", text: "Complete a habit to see it here"},
       };
-      const message = messages[filter as "active" | "completed"];
+      const message = messages[filter];
       return (
         <div className={styles.empty}>
           <p className={styles.emptyTitle}>{message.title}</p>
@@ -90,6 +94,13 @@ export const HabitList = ({
         </div>
       );
     }
+
+    return (
+      <div className={styles.empty}>
+        <p className={styles.emptyTitle}>No habits found</p>
+        <span className={styles.emptyText}>Try a different search term</span>
+      </div>
+    );
   }
 
   return (

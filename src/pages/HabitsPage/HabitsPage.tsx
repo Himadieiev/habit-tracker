@@ -14,8 +14,11 @@ export const HabitsPage = () => {
   const {
     habits,
     allHabitsCount,
+    filteredCount,
     filter,
     setFilter,
+    searchQuery,
+    setSearchQuery,
     toggleHabit,
     addHabit,
     deleteHabit,
@@ -103,11 +106,28 @@ export const HabitsPage = () => {
       </div>
 
       <AddHabitForm onAdd={addHabit} />
+
+      <div className={styles.searchWrapper}>
+        <input
+          type="text"
+          placeholder="Search habits..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className={styles.searchInput}
+        />
+        {searchQuery && (
+          <button onClick={() => setSearchQuery("")} className={styles.searchClear}>
+            ✕
+          </button>
+        )}
+      </div>
+
       <HabitFilters value={filter} onChange={setFilter} />
       <HabitList
         habits={habits}
         filter={filter}
         allHabitsCount={allHabitsCount}
+        filteredCount={filteredCount}
         onToggle={toggleHabit}
         onDelete={deleteHabit}
         onReorder={reorderHabits}
