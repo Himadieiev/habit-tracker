@@ -54,6 +54,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
 
     @include hover {
         opacity: 0.8;
@@ -61,6 +64,7 @@
 
     @include mobile {
         font-size: var(--text-xl);
+        min-height: 44px;
     }
 }
 
