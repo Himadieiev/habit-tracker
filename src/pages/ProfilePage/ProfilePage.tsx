@@ -141,6 +141,8 @@ export const ProfilePage = () => {
                 alt="Avatar"
                 className={styles.avatar}
                 referrerPolicy="no-referrer"
+                width={80}
+                height={80}
               />
             ) : (
               <div className={styles.avatarPlaceholder}>
