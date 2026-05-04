@@ -17,6 +17,10 @@
     justify-content: space-between;
     gap: 16px;
     margin-bottom: 8px;
+
+    @include mobile-s {
+        flex-wrap: wrap;
+    }
 }
 
 .backButton {
@@ -26,6 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0;
     background: transparent;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
@@ -42,6 +47,22 @@
         border-color: var(--color-accent);
         color: var(--color-accent);
     }
+
+    @include mobile-s {
+        width: calc(50% - 8px);
+        gap: 8px;
+        order: 1;
+    }
+}
+
+.backButtonText {
+    display: none;
+
+    @include mobile-s {
+        display: inline;
+        font-size: var(--text-sm);
+        font-weight: 500;
+    }
 }
 
 .title {
@@ -55,8 +76,10 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     min-height: 48px;
-    display: flex;
-    align-items: center;
+    line-height: 48px;
+    display: block;
+    margin-block: auto;
+    min-width: 0;
 
     @include hover {
         opacity: 0.8;
@@ -65,6 +88,13 @@
     @include mobile {
         font-size: var(--text-xl);
         min-height: 44px;
+        line-height: 44px;
+    }
+
+    @include mobile-s {
+        width: 100%;
+        flex: none;
+        order: 0;
     }
 }
 
@@ -79,6 +109,7 @@
     padding: 0 12px;
     color: var(--color-white);
     outline: none;
+    min-width: 0;
 
     &:focus {
         border-color: var(--color-accent);
@@ -87,6 +118,12 @@
     @include mobile {
         font-size: var(--text-xl);
         height: 44px;
+    }
+
+    @include mobile-s {
+        width: 100%;
+        flex: none;
+        order: 0;
     }
 }
 
@@ -107,11 +144,23 @@
         border-color: var(--color-danger);
         color: var(--color-danger);
     }
+
+    @include mobile-s {
+        width: calc(50% - 8px);
+        padding: 0;
+        order: 2;
+    }
 }
 
 .subtitle {
+
     font-size: var(--text-sm);
     color: var(--color-text-secondary);
+
+    @include mobile-s {
+        margin-top: 10px;
+        text-align: center;
+    }
 }
 
 .stats {

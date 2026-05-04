@@ -270,6 +270,7 @@ export const HabitDetailPage = () => {
                 strokeLinejoin="round"
               />
             </svg>
+            <span className={styles.backButtonText}>Back</span>
           </button>
           {isEditing ? (
             <input
@@ -296,7 +297,7 @@ export const HabitDetailPage = () => {
           </button>
         </div>
 
-        <span className={styles.subtitle}>Last {activeDaysCount} days</span>
+        <p className={styles.subtitle}>Last {activeDaysCount} days</p>
       </div>
 
       <div className={styles.stats}>
