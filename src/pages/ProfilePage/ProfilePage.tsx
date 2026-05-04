@@ -7,6 +7,7 @@ import {useHabits} from "@/features/habits/model/useHabits";
 import {calculateBestStreak} from "@/features/habits/utils/habitStats";
 import {supabase} from "@/lib/supabaseClient";
 import {ConfirmModal} from "@/components/ConfirmModal";
+import {CountUpAnimation} from "@/components/CountUpAnimation/CountUpAnimation";
 import styles from "./ProfilePage.module.scss";
 
 export const ProfilePage = () => {
@@ -160,15 +161,20 @@ export const ProfilePage = () => {
           <h3 className={styles.sectionTitle}>Account Statistics</h3>
           <div className={styles.statsGrid}>
             <div className={styles.statCard}>
-              <div className={styles.statValue}>{allHabitsCount}</div>
+              <CountUpAnimation end={allHabitsCount} delay={0} className={styles.statValue} />
               <div className={styles.statLabel}>Total Habits</div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statValue}>{bestStreak}</div>
+              <CountUpAnimation end={bestStreak} delay={100} className={styles.statValue} />
               <div className={styles.statLabel}>Best Streak</div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statValue}>{avgCompletion}%</div>
+              <CountUpAnimation
+                end={avgCompletion}
+                delay={200}
+                suffix="%"
+                className={styles.statValue}
+              />
               <div className={styles.statLabel}>Avg Completion</div>
             </div>
           </div>

@@ -10,6 +10,7 @@ import {
 import {habitsService} from "@/features/habits/api/habitsService";
 import type {HabitBase, Log} from "@/features/habits/model/types";
 import {ConfirmModal} from "@/components/ConfirmModal";
+import {CountUpAnimation} from "@/components/CountUpAnimation/CountUpAnimation";
 import styles from "./HabitDetailPage.module.scss";
 
 const WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -300,23 +301,28 @@ export const HabitDetailPage = () => {
 
       <div className={styles.stats}>
         <div className={styles.stat}>
-          <span className={styles.statValue}>{stats.completionRate}%</span>
-          <span className={styles.statLabel}>Completion</span>
+          <CountUpAnimation
+            end={stats.completionRate}
+            delay={0}
+            suffix="%"
+            className={styles.statValue}
+          />
+          <div className={styles.statLabel}>Completion</div>
         </div>
 
         <div className={styles.stat}>
-          <span className={styles.statValue}>{stats.completedDays}</span>
-          <span className={styles.statLabel}>Days done</span>
+          <CountUpAnimation end={stats.completedDays} delay={100} className={styles.statValue} />
+          <div className={styles.statLabel}>Days done</div>
         </div>
 
         <div className={styles.stat}>
-          <span className={styles.statValue}>{stats.currentStreak}</span>
-          <span className={styles.statLabel}>Current streak</span>
+          <CountUpAnimation end={stats.currentStreak} delay={200} className={styles.statValue} />
+          <div className={styles.statLabel}>Current streak</div>
         </div>
 
         <div className={styles.stat}>
-          <span className={styles.statValue}>{stats.bestStreak}</span>
-          <span className={styles.statLabel}>Best streak</span>
+          <CountUpAnimation end={stats.bestStreak} delay={300} className={styles.statValue} />
+          <div className={styles.statLabel}>Best streak</div>
         </div>
       </div>
 
