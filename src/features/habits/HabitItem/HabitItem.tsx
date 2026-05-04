@@ -107,7 +107,12 @@ export const HabitItem = ({
             {completed ? "Undo" : "Complete"}
           </Button>
 
-          <Button size="sm" variant="ghost" onClick={() => onDelete(id)}>
+          <Button
+            size="sm"
+            variant="ghost"
+            onClick={() => onDelete(id)}
+            className={styles.deleteBtn}
+          >
             Delete
           </Button>
         </div>
