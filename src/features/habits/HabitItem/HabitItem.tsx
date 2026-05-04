@@ -17,6 +17,7 @@ type HabitItemProps = {
   onDelete: (id: string) => void;
   onDragStart: (e: React.DragEvent, id: string) => void;
   onDrop: (e: React.DragEvent, id: string) => void;
+  isReorderable?: boolean;
 };
 
 export const HabitItem = ({
@@ -29,6 +30,7 @@ export const HabitItem = ({
   onDelete,
   onDragStart,
   onDrop,
+  isReorderable,
 }: HabitItemProps) => {
   const navigate = useNavigate();
 
@@ -64,7 +66,13 @@ export const HabitItem = ({
       onDrop={(e) => onDrop(e, id)}
     >
       <div className={styles.top}>
-        <span className={styles.dragHandle} draggable onDragStart={(e) => onDragStart(e, id)}>
+        <span
+          className={classNames(styles.dragHandle, {
+            [styles.disabled]: !isReorderable,
+          })}
+          draggable={isReorderable}
+          onDragStart={(e) => isReorderable && onDragStart(e, id)}
+        >
           ⋮⋮
         </span>
         <span className={styles.title} onClick={() => navigate(`/habit/${id}`)}>

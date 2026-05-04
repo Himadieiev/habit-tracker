@@ -29,7 +29,14 @@ export const HabitList = ({
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [draggedId, setDraggedId] = useState<string | null>(null);
 
+  const isReorderable = filter === "all";
+
   const handleDragStart = (e: React.DragEvent, id: string) => {
+    if (!isReorderable) {
+      e.preventDefault();
+      return;
+    }
+
     setDraggedId(id);
 
     e.dataTransfer.effectAllowed = "move";
@@ -37,6 +44,8 @@ export const HabitList = ({
 
   const handleDrop = (e: React.DragEvent, targetId: string) => {
     e.preventDefault();
+
+    if (!isReorderable) return;
 
     if (!draggedId || draggedId === targetId) return;
 
@@ -118,6 +127,7 @@ export const HabitList = ({
             logs={habit.logs}
             onDragStart={(e, id) => handleDragStart(e, id)}
             onDrop={(e, id) => handleDrop(e, id)}
+            isReorderable={isReorderable}
           />
         ))}
       </div>
